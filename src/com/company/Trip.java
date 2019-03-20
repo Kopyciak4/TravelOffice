@@ -1,6 +1,6 @@
 package com.company;
 
-public class Trip {
+public abstract class Trip {
     private Date start;
     private Date end;
     private String destination;

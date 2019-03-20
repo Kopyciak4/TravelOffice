@@ -17,11 +17,14 @@ public class TravelOffice {
     }
 
     public boolean removeTrip(String destination) {
-       if(trips.containsKey(destination)){
-           trips.remove(destination);
-           return true;
-       }
-       return false;
+
+        Trip checkTrip =  trips.remove(destination);
+        for(Customer c : customers){
+            if(c.getTrip().equals(checkTrip)){
+                c.setTrip(null);
+            }
+        }
+        return checkTrip != null;
     }
 
     public Customer findCustomerByName(String name){
@@ -34,11 +37,7 @@ public class TravelOffice {
     }
 
     public boolean removeCustomer(Customer customer) {
-        if(customers.contains(customer)){
-            customers.remove(customer);
-            return true;
-        }
-        return false;
+        return customers.remove(customer);
     }
 
     public Set<Customer> getCustomers() {

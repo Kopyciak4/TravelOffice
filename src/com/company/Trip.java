@@ -6,17 +6,6 @@ public abstract class Trip {
     private String destination;
     private int price;
 
-
-    public Trip(Date start, Date end, String destination) {
-        this.start = start;
-        this.end = end;
-        this.destination = destination;
-    }
-
-    public Trip() {
-
-    }
-
     public int getPrice() {
         return price;
     }

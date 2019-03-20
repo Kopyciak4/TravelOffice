@@ -5,11 +5,13 @@ import java.util.Scanner;
 public class MainHandler implements UserInterface {
 
     private TravelOffice travelOffice;
-    private Scanner sc = null;
+    private static Scanner sc = null;
 
     public MainHandler(TravelOffice travelOffice) {
         this.travelOffice = travelOffice;
-        sc = new Scanner(System.in);
+        if (sc == null) {
+            sc = new Scanner(System.in);
+        }
     }
 
     @Override
@@ -52,7 +54,11 @@ public class MainHandler implements UserInterface {
         int price = sc.nextInt();
 
         System.out.println("typ wycieczki (L / Z)");
-        String type =  sc.next();
+        String type;
+        do {
+            type =  sc.next().toUpperCase();
+        }while(!type.equals("Z") && !type.equals("L"));
+
 
         Trip trip = null;
         if (type.startsWith("L")) {
@@ -71,6 +77,7 @@ public class MainHandler implements UserInterface {
             ((AbroadTrip) trip).setInsurence(insurence);
         }
 
+        travelOffice.addTrip(destination, trip);
         System.out.println(trip);
         return trip;
 
@@ -80,10 +87,11 @@ public class MainHandler implements UserInterface {
     public void asssign() {
         System.out.println("nazwa klienta");
         String name = sc.next();
+
         Customer customer = travelOffice.findCustomerByName(name);
         if(customer== null){
-            System.out.println("brak podaneg klienta" + "\n");
-        };
+            System.out.println("brak podanego klienta \n");
+        }
 
         System.out.println("miejsce wycieczki");
         String destination = sc.next();
@@ -92,34 +100,43 @@ public class MainHandler implements UserInterface {
         if(trip == null)
             System.out.println("brak takiej wycieczki");
 
+        System.out.println("Wycieczka: " + destination + "przypisana do: " + name);
         customer.setTrip(trip);
-
-
-
-
-
-
-
 
     }
 
     @Override
     public boolean removeTrip() {
-        return false;
+
+        System.out.println("miejsce wycieczki");
+        String destination = sc.next();
+
+        return travelOffice.removeTrip(destination);
+
     }
 
     @Override
     public boolean removeCustomer() {
-        return false;
+        System.out.println("nazwa klienta");
+        String name = sc.next();
+
+        return travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
     }
 
     @Override
     public void showTrips() {
-
+        System.out.println("lista wycieczek");
+        for(Trip t : travelOffice.getTrips().values()){
+            System.out.println(t);
+        }
     }
 
     @Override
     public void showCustomers() {
+        System.out.println("lista klientow");
+        for(Customer c: travelOffice.getCustomers()){
+            System.out.println(c);
+        }
 
     }
 }

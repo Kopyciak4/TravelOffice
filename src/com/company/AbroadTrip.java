@@ -5,7 +5,9 @@ public class AbroadTrip extends Trip {
     private int insurence;
 
     public AbroadTrip(Date start, Date end, String destination) {
-        super(start, end, destination);
+       setStart(start);
+       setEnd(end);
+       setDestination(destination);
 
     }
 

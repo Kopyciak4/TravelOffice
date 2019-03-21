@@ -85,12 +85,15 @@ public class MainHandler implements UserInterface {
 
     @Override
     public void asssign() {
+
         System.out.println("nazwa klienta");
         String name = sc.next();
-
-        Customer customer = travelOffice.findCustomerByName(name);
-        if(customer== null){
+        Customer customer;
+        try {
+             customer = travelOffice.findCustomerByName(name);
+        } catch (NoSuchCustomerException e) {
             System.out.println("brak podanego klienta \n");
+            return;
         }
 
         System.out.println("miejsce wycieczki");
@@ -111,7 +114,14 @@ public class MainHandler implements UserInterface {
         System.out.println("miejsce wycieczki");
         String destination = sc.next();
 
-        return travelOffice.removeTrip(destination);
+        try {
+            travelOffice.removeTrip(destination);
+        } catch (NoSuchTripException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -119,8 +129,13 @@ public class MainHandler implements UserInterface {
     public boolean removeCustomer() {
         System.out.println("nazwa klienta");
         String name = sc.next();
-
-        return travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
+        try {
+            travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
+        } catch (NoSuchCustomerException e) {
+            System.out.println("brak takiego klienta");
+            return false;
+        }
+        return true;
     }
 
     @Override

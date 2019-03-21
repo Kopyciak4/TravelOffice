@@ -16,7 +16,7 @@ public class TravelOffice {
         trips.put(destination, trip);
     }
 
-    public boolean removeTrip(String destination) {
+    public boolean removeTrip(String destination) throws NoSuchTripException {
 
         Trip checkTrip =  trips.remove(destination);
         for(Customer c : customers){
@@ -24,16 +24,17 @@ public class TravelOffice {
                 c.setTrip(null);
             }
         }
-        return checkTrip != null;
+            throw new NoSuchTripException("wycieczka nie zostala usunieta");
     }
 
-    public Customer findCustomerByName(String name){
+    public Customer findCustomerByName(String name) throws NoSuchCustomerException{
         for (Customer c : customers){
             if(c.getName().equals(name)){
                 return c;
             }
         }
-        return null;
+        throw new NoSuchCustomerException("klent nie zostal usuniety");
+        //return null;
     }
 
     public boolean removeCustomer(Customer customer) {

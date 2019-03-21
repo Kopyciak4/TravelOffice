@@ -1,8 +1,10 @@
 package com.company;
 
+import java.time.LocalDate;
+
 public abstract class Trip {
-    private Date start;
-    private Date end;
+    private LocalDate start;
+    private LocalDate end;
     private String destination;
     private int price;
 
@@ -14,19 +16,19 @@ public abstract class Trip {
         this.price = price;
     }
 
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 

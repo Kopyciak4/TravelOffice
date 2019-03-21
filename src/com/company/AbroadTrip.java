@@ -1,10 +1,12 @@
 package com.company;
 
+import java.time.LocalDate;
+
 public class AbroadTrip extends Trip {
 
     private int insurence;
 
-    public AbroadTrip(Date start, Date end, String destination) {
+    public AbroadTrip(LocalDate start, LocalDate end, String destination) {
        setStart(start);
        setEnd(end);
        setDestination(destination);

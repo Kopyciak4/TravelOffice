@@ -1,11 +1,14 @@
 package com.company;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MainHandler implements UserInterface {
 
     private TravelOffice travelOffice;
     private static Scanner sc = null;
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public MainHandler(TravelOffice travelOffice) {
         this.travelOffice = travelOffice;
@@ -44,11 +47,11 @@ public class MainHandler implements UserInterface {
 
         System.out.println("data wylotu");
         String start = sc.next();
-        Date begDate = Date.of(start);
+        LocalDate begDate = LocalDate.parse(start, format);
 
         System.out.println("data przylotu");
         String end = sc.next();
-        Date endDate = Date.of(end);
+        LocalDate endDate = LocalDate.parse(start, format);
 
         System.out.println("cena");
         int price = sc.nextInt();

@@ -129,29 +129,34 @@ public class MainHandler implements UserInterface {
     public boolean removeCustomer() {
         System.out.println("nazwa klienta");
         String name = sc.next();
-        try {
-            travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
-        } catch (NoSuchCustomerException e) {
-            System.out.println("brak takiego klienta");
-            return false;
-        }
-        return true;
+//        try {
+//            travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
+//        } catch (NoSuchCustomerException e) {
+//            System.out.println("brak takiego klienta");
+//            return false;
+//        }
+//        return true;
+
+        return travelOffice.getCustomers().removeIf(c -> c.getName().equals(name));
+
     }
 
     @Override
     public void showTrips() {
         System.out.println("lista wycieczek");
-        for(Trip t : travelOffice.getTrips().values()){
-            System.out.println(t);
-        }
+//        for(Trip t : travelOffice.getTrips().values()){
+//            System.out.println(t);
+//        }
+        travelOffice.getTrips().values().forEach((v -> System.out.println(v)));
     }
 
     @Override
     public void showCustomers() {
         System.out.println("lista klientow");
-        for(Customer c: travelOffice.getCustomers()){
-            System.out.println(c);
-        }
+//        for(Customer c: travelOffice.getCustomers()){
+//            System.out.println(c);
+//        }
+        travelOffice.getCustomers().forEach((c -> System.out.println(c)));
 
     }
 }

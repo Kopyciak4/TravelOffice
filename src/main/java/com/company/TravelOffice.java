@@ -4,7 +4,6 @@ package com.company;
 import java.util.*;
 
 public class TravelOffice {
-   // public static int customerCount = 0;
     public Set<Customer> customers = new HashSet<>();
     public Map<String, Trip> trips = new HashMap<>();
 
@@ -34,7 +33,6 @@ public class TravelOffice {
             }
         }
         throw new NoSuchCustomerException("klent nie zostal usuniety");
-        //return null;
     }
 
     public boolean removeCustomer(Customer customer) {
@@ -51,9 +49,6 @@ public class TravelOffice {
 
 
 
-//    public int getCustomerCount() {
-//        return customerCount;
-//    }
 
 
 

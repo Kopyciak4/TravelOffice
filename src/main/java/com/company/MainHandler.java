@@ -7,11 +7,15 @@ import java.util.Scanner;
 public class MainHandler implements UserInterface {
 
     private TravelOffice travelOffice;
+    private TravelOfficeService travelOfficeService;
     private static Scanner sc = null;
+
+
+
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public MainHandler(TravelOffice travelOffice) {
-        this.travelOffice = travelOffice;
+    public MainHandler(TravelOfficeService travelOfficeService) {
+        this.travelOfficeService = travelOfficeService;
         if (sc == null) {
             sc = new Scanner(System.in);
         }
@@ -31,13 +35,10 @@ public class MainHandler implements UserInterface {
         System.out.println("miasto");
         String city = sc.next();
 
-        Address address = new Address(street, zip, city);
-        Customer customer = new Customer(name);
-        customer.setAddress(address);
-        travelOffice.addCustomer(customer);
+        System.out.println("utworzony");
 
-        System.out.println("utworzony" + customer);
-        return customer;
+        return travelOfficeService.addCustomer(name, street, zip, city);
+
     }
 
     @Override
@@ -51,7 +52,7 @@ public class MainHandler implements UserInterface {
 
         System.out.println("data przylotu");
         String end = sc.next();
-        LocalDate endDate = LocalDate.parse(start, format);
+        LocalDate endDate = LocalDate.parse(end, format);
 
         System.out.println("cena");
         int price = sc.nextInt();
@@ -84,30 +85,28 @@ public class MainHandler implements UserInterface {
         System.out.println(trip);
         return trip;
 
+
+
+
     }
 
     @Override
-    public void asssign() {
+    public void assign() {
 
         System.out.println("nazwa klienta");
         String name = sc.next();
-        Customer customer;
-        try {
-             customer = travelOffice.findCustomerByName(name);
-        } catch (NoSuchCustomerException e) {
-            System.out.println("brak podanego klienta \n");
-            return;
-        }
+        travelOfficeService.getCustomerToAssign(name);
 
         System.out.println("miejsce wycieczki");
         String destination = sc.next();
+        travelOfficeService.getTripToAssign(destination);
 
-        Trip trip = travelOffice.getTrips().get(destination);
-        if(trip == null)
-            System.out.println("brak takiej wycieczki");
 
+        travelOfficeService.assign(travelOfficeService.getCustomerToAssign(name),travelOfficeService.getTripToAssign(destination));
         System.out.println("Wycieczka: " + destination + "przypisana do: " + name);
-        customer.setTrip(trip);
+
+
+        //customer.setTrip(trip);
 
     }
 
@@ -117,14 +116,7 @@ public class MainHandler implements UserInterface {
         System.out.println("miejsce wycieczki");
         String destination = sc.next();
 
-        try {
-            travelOffice.removeTrip(destination);
-        } catch (NoSuchTripException e) {
-            System.out.println(e);
-            return false;
-        }
-
-        return true;
+        return travelOfficeService.removeTrip(destination);
 
     }
 
@@ -140,7 +132,7 @@ public class MainHandler implements UserInterface {
 //        }
 //        return true;
 
-        return travelOffice.getCustomers().removeIf(c -> c.getName().equals(name));
+        return travelOfficeService.removeCustomer(name);
 
     }
 
@@ -150,7 +142,8 @@ public class MainHandler implements UserInterface {
 //        for(Trip t : travelOffice.getTrips().values()){
 //            System.out.println(t);
 //        }
-        travelOffice.getTrips().values().forEach((v -> System.out.println(v)));
+
+        travelOfficeService.showTrips();
     }
 
     @Override
@@ -159,7 +152,8 @@ public class MainHandler implements UserInterface {
 //        for(Customer c: travelOffice.getCustomers()){
 //            System.out.println(c);
 //        }
-        travelOffice.getCustomers().forEach((c -> System.out.println(c)));
+        travelOfficeService.showCustomers();
+
 
     }
 }

@@ -6,7 +6,7 @@ public interface UserInterface {
 
     Trip addTrip();
 
-    void asssign();
+    void assign();
 
     boolean removeTrip();
 

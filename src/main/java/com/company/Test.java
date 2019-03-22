@@ -6,8 +6,9 @@ public class Test {
 
     public static void main(String[] args) {
 
-        TravelOffice travelOffice = new TravelOffice();
-        MainHandler mainHandler = new MainHandler(travelOffice);
+        TravelOfficeService travelOfficeService = new TravelOfficeService();
+       // TravelOffice travelOffice = new TravelOffice();
+        MainHandler mainHandler = new MainHandler(travelOfficeService);
 
         int action;
         do {
@@ -32,7 +33,7 @@ public class Test {
                     mainHandler.addTrip();
                     break;
                 case 3:
-                    mainHandler.asssign();
+                    mainHandler.assign();
                     break;
                 case 4:
                     mainHandler.removeCustomer();

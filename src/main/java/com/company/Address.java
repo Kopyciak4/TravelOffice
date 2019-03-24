@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Objects;
+
 public class Address {
 
     private String street;
@@ -45,5 +47,20 @@ public class Address {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return street.equals(address.street) &&
+                zip.equals(address.zip) &&
+                city.equals(address.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(street, zip, city);
     }
 }

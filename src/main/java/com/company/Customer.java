@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Objects;
+
 public class Customer {
 
     private String name;
@@ -41,5 +43,20 @@ public class Customer {
                 ", address=" + address +
                 ", trip=" + trip +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return name.equals(customer.name) &&
+                address.equals(customer.address) &&
+                ((trip != null && trip.equals(customer.trip)) || trip == null);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, address, trip);
     }
 }

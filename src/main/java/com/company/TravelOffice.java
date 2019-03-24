@@ -15,7 +15,7 @@ public class TravelOffice {
         trips.put(destination, trip);
     }
 
-    public boolean removeTrip(String destination) throws NoSuchTripException {
+    public void removeTrip(String destination) throws NoSuchTripException {
 
         Trip checkTrip =  trips.remove(destination);
         for(Customer c : customers){
@@ -23,7 +23,9 @@ public class TravelOffice {
                 c.setTrip(null);
             }
         }
+        if (checkTrip == null) {
             throw new NoSuchTripException("wycieczka nie zostala usunieta");
+        }
     }
 
     public Customer findCustomerByName(String name) throws NoSuchCustomerException{

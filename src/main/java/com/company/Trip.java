@@ -1,6 +1,7 @@
 package com.company;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public abstract class Trip {
     private LocalDate start;
@@ -48,5 +49,21 @@ public abstract class Trip {
                 ", destination='" + destination + '\'' +
                 ", price=" + getPrice() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trip trip = (Trip) o;
+        return price == trip.price &&
+                start.equals(trip.start) &&
+                end.equals(trip.end) &&
+                destination.equals(trip.destination);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end, destination, price);
     }
 }

@@ -7,9 +7,13 @@ public class TravelOfficeService {
 
     private TravelOffice travelOffice;
 
-    public TravelOfficeService() {
-        this.travelOffice = new TravelOffice();
+
+
+    public TravelOfficeService(TravelOffice travelOffice) {
+       // this.travelOffice = new TravelOffice();
+        this.travelOffice = travelOffice;
     }
+
 
 
     public Customer addCustomer(String name, String street, String zip, String city) {
@@ -17,12 +21,32 @@ public class TravelOfficeService {
         Customer customer = new Customer(name);
         customer.setAddress(address);
         travelOffice.addCustomer(customer);
+
         return customer;
     }
 
-    public Trip addTrip(String destination, LocalDate begDate, LocalDate endDate, int price, String type) {
-        return travelOffice.addTrip(destination, trip);
+    public Trip addAbroadTrip(LocalDate begDate, LocalDate endDate, String destination, int insurence, int price){
+        Trip trip = new AbroadTrip(begDate, endDate, destination);
+        trip.setPrice(price);
+        System.out.println("ubezpiecznie");
+        ((AbroadTrip) trip).setInsurence(insurence);
+        travelOffice.addTrip(destination, trip);
+        return trip;
     }
+
+    public Trip addDomesticTrip(LocalDate begDate, LocalDate endDate, String destination, int discount, int price){
+        Trip trip = new DomesticTrip(begDate, endDate, destination);
+        trip.setPrice(price);
+        System.out.println("znizka");
+        ((DomesticTrip) trip).setOwnArrivalDiscount(discount);
+        travelOffice.addTrip(destination, trip);
+        return trip;
+    }
+
+
+
+
+
 
     public void assign(Customer customer, Trip trip) {
         customer.setTrip(trip);
@@ -33,7 +57,7 @@ public class TravelOfficeService {
         try {
             customer = travelOffice.findCustomerByName(name);
         } catch (NoSuchCustomerException e) {
-            System.out.println("brak podanego klienta \n");
+            MainHandler.log.warning("Brak podanego klienta: " + name);
             return null;
         }
         return customer;
@@ -58,12 +82,10 @@ public class TravelOfficeService {
             return false;
         }
         return true;
-
     }
 
     public boolean removeCustomer(String name) {
-        travelOffice.getCustomers().removeIf(c -> c.getName().equals(name));
-        return true;
+        return travelOffice.getCustomers().removeIf(c -> c.getName().equals(name));
     }
 
     public void showCustomers() {
@@ -73,8 +95,6 @@ public class TravelOfficeService {
     public void showTrips() {
         travelOffice.getTrips().values().forEach((v -> System.out.println(v)));
     }
-
-
 
 
 

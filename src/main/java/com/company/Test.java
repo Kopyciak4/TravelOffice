@@ -1,14 +1,30 @@
 package com.company;
 
+
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.*;
 
 public class Test {
 
+    private static Logger logger = Logger.getLogger(Test.class.getPackage().getName());
+
+
     public static void main(String[] args) {
 
-        TravelOfficeService travelOfficeService = new TravelOfficeService();
-       // TravelOffice travelOffice = new TravelOffice();
-        MainHandler mainHandler = new MainHandler(travelOfficeService);
+        Logger.getLogger("").removeHandler(new ConsoleHandler());
+        try {
+            Handler handler = new FileHandler("log.txt");
+            handler.setFormatter(new SimpleFormatter());
+            logger.addHandler(handler);
+        }catch (IOException e){
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
+
+
+        TravelOffice travelOffice = new TravelOffice();
+        TravelOfficeService travelOfficeService = new TravelOfficeService(travelOffice);
+        MainHandler mainHandler = new MainHandler(travelOfficeService, logger);
 
         int action;
         do {

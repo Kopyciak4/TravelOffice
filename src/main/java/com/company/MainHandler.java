@@ -3,10 +3,11 @@ package com.company;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class MainHandler implements UserInterface {
 
-    private TravelOffice travelOffice;
+    public static Logger log;
     private TravelOfficeService travelOfficeService;
     private static Scanner sc = null;
 
@@ -14,11 +15,12 @@ public class MainHandler implements UserInterface {
 
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public MainHandler(TravelOfficeService travelOfficeService) {
+    public MainHandler(TravelOfficeService travelOfficeService, Logger log) {
         this.travelOfficeService = travelOfficeService;
         if (sc == null) {
             sc = new Scanner(System.in);
         }
+        this.log = log;
     }
 
     @Override
@@ -36,8 +38,9 @@ public class MainHandler implements UserInterface {
         String city = sc.next();
 
         System.out.println("utworzony");
-
-        return travelOfficeService.addCustomer(name, street, zip, city);
+        Customer customer = travelOfficeService.addCustomer(name, street, zip, city);
+        log.info("Klient" + customer + "zostal dodany");
+        return customer;
 
     }
 
@@ -49,7 +52,6 @@ public class MainHandler implements UserInterface {
         System.out.println("data wylotu");
         String start = sc.next();
         LocalDate begDate = LocalDate.parse(start, format);
-
         System.out.println("data przylotu");
         String end = sc.next();
         LocalDate endDate = LocalDate.parse(end, format);
@@ -63,30 +65,16 @@ public class MainHandler implements UserInterface {
             type =  sc.next().toUpperCase();
         }while(!type.equals("Z") && !type.equals("L"));
 
-
-        Trip trip = null;
+        Trip trip;
         if (type.startsWith("L")) {
-            trip = new DomesticTrip(begDate, endDate, destination);
-            trip.setPrice(price);
-
-            System.out.println("znizka");
             int discount = sc.nextInt();
-            ((DomesticTrip) trip).setOwnArrivalDiscount(discount);
+            trip = travelOfficeService.addDomesticTrip(begDate, endDate, destination, discount, price);
         } else {
-            trip = new AbroadTrip(begDate, endDate, destination);
-            trip.setPrice(price);
-
-            System.out.println("ubezpiecznie");
             int insurence = sc.nextInt();
-            ((AbroadTrip) trip).setInsurence(insurence);
+            trip = travelOfficeService.addAbroadTrip(begDate, endDate, destination, insurence, price);
         }
-
-        travelOffice.addTrip(destination, trip);
-        System.out.println(trip);
+        log.fine(trip.toString());
         return trip;
-
-
-
 
     }
 
@@ -95,18 +83,17 @@ public class MainHandler implements UserInterface {
 
         System.out.println("nazwa klienta");
         String name = sc.next();
-        travelOfficeService.getCustomerToAssign(name);
+        Customer customer= travelOfficeService.getCustomerToAssign(name);
 
         System.out.println("miejsce wycieczki");
         String destination = sc.next();
-        travelOfficeService.getTripToAssign(destination);
+        Trip trip = travelOfficeService.getTripToAssign(destination);
 
 
-        travelOfficeService.assign(travelOfficeService.getCustomerToAssign(name),travelOfficeService.getTripToAssign(destination));
+        travelOfficeService.assign(customer,trip);
         System.out.println("Wycieczka: " + destination + "przypisana do: " + name);
 
 
-        //customer.setTrip(trip);
 
     }
 
@@ -124,13 +111,7 @@ public class MainHandler implements UserInterface {
     public boolean removeCustomer() {
         System.out.println("nazwa klienta");
         String name = sc.next();
-//        try {
-//            travelOffice.removeCustomer(travelOffice.findCustomerByName(name));
-//        } catch (NoSuchCustomerException e) {
-//            System.out.println("brak takiego klienta");
-//            return false;
-//        }
-//        return true;
+
 
         return travelOfficeService.removeCustomer(name);
 
@@ -139,9 +120,7 @@ public class MainHandler implements UserInterface {
     @Override
     public void showTrips() {
         System.out.println("lista wycieczek");
-//        for(Trip t : travelOffice.getTrips().values()){
-//            System.out.println(t);
-//        }
+
 
         travelOfficeService.showTrips();
     }
@@ -149,9 +128,7 @@ public class MainHandler implements UserInterface {
     @Override
     public void showCustomers() {
         System.out.println("lista klientow");
-//        for(Customer c: travelOffice.getCustomers()){
-//            System.out.println(c);
-//        }
+
         travelOfficeService.showCustomers();
 
 
